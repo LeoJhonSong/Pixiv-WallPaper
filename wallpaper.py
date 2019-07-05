@@ -4,10 +4,12 @@ import time
 import ctypes
 from urllib import request
 
+############################# Basic Configuration ##############################
 # path to store the Picture cache
 path = os.path.join(os.path.expanduser("~"), "Pictures/PixivWallPaperPicCache")
 # time period to change the Picture (minutes)
 period = 1
+################################################################################
 
 # detect if your platform is Windows or Linux
 system = platform.system()
