@@ -1,3 +1,3 @@
 @echo off
-start pythonw .\wallpaper.py
+start pythonw .\Pixiv-Wallpaper.py
 exit
