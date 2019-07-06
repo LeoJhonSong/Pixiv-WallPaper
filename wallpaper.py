@@ -1,3 +1,6 @@
+#! /usr/bin/python
+# -*- coding: UTF-8 -*-
+
 import os
 import platform
 import time
@@ -8,7 +11,7 @@ from urllib import request
 # path to store the Picture cache
 path = os.path.join(os.path.expanduser("~"), "Pictures/PixivWallPaperPicCache")
 # time period to change the Picture (minutes)
-period = 1
+period = 10
 ################################################################################
 
 # detect if your platform is Windows or Linux
@@ -18,7 +21,7 @@ picPath = os.path.join(path, "1.jpg")
 request_headers = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36"
 }
-url = "https://api.pixivic.com/illust?w_h_ratio=16-9&minWidth=1080&range=0.0001&isR18=false"
+url = "https://api.pixivic.com/illust?w_h_ratio=16-9&minWidth=1080&range=0.0001&isR18=false&getDetail=true"
 
 while True:
     # detect if the cache folder exist, if not, make one
@@ -32,9 +35,9 @@ while True:
     try:
         realURL = request.urlopen(req).geturl()
     except:
-        print('Error happened, trying again')
+        print('Error happened, trying again to get URL of the picture')
         continue
-    print('Got URL of the Picture')
+    print('Got URL of the picture')
     request.urlretrieve(realURL, picPath)
     print('Picture downloaded')
     if system == 'Windows':
@@ -42,16 +45,9 @@ while True:
         ctypes.windll.user32.SystemParametersInfoW(20, 0, picPath, 0)
     if system == 'Linux':
         # set pic as wallpaper
-        os.system('gsettings set org.gnome.desktop.background picture-uri "file:///%s"' % (picPath))
+        os.system('export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/')  # make sure the script is able to change gsettings
+        os.system('gsettings set org.gnome.desktop.background picture-uri "file://%s"' % (picPath))
     print('Wallpaper updated')
     print('waiting for %d more minutes' % (period))
     time.sleep(period*60)  # time period to change the Pic
-
-
-
-
-
-
-
-
 

@@ -25,4 +25,10 @@ Take my Windows environment as an example, my home directory is
 **C:/Users/LeoJh/Pictures/PixivWallPaperPicCache**. The wallpaper will be
 updated every one minute.
 
-The script can start running invisibly by execute the batch file `Startup.bat`.
+## Windows
+
+The script can start running invisibly by execute the batch file `Startup.bat`. you can even set the script to startup automatically every time power up by modifying the `Startup.vbs` and put it in **C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup**
+
+## Linux
+
+Since I am using gnome, as a lazy bone, only gnome is supported.
