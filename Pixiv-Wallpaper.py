@@ -7,6 +7,7 @@ import time
 import random
 import shutil
 import ctypes
+import requests
 from urllib import request
 
 ############################# Basic Configuration ##############################
@@ -19,12 +20,13 @@ period = 1
 # detect if your platform is Windows or Linux
 system = platform.system()
 # anti-anti-crawler: User-Agent
-userAgents = ["Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36",
-        "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0"
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/537.75.14",
-        "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Win64; x64; Trident/6.0)"
-        ]
+userAgents = [
+    "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0"
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/537.75.14",
+    "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Win64; x64; Trident/6.0)"
+]
 
 url = "https://api.pixivic.com/illust?w_h_ratio=16-9&minWidth=1080&range=0.0001&isR18=false&getDetail=true"
 
@@ -36,7 +38,7 @@ while True:
         print('Error happened, trying again to get URL of the picture')
         continue
     print('Got URL of the picture')
-    picName = realURL[realURL.find('?id')+4:realURL.find('&title')]
+    picName = realURL[realURL.find('?id') + 4:realURL.find('&title')]
     picPath = os.path.join(path, (picName + ".jpg"))
     # detect if the cache folder exist, if not, make one
     if not os.path.exists(path):
@@ -44,10 +46,11 @@ while True:
     else:
         # detect if there is cache pictures, if so, delete them
         shutil.rmtree(path)
-        os.mkdir(path)
-    if not os.path.exists(path):
         os.system('mkdir ' + path)
-    request.urlretrieve(realURL, picPath)
+    #  request.urlretrieve(realURL, picPath)
+    picture = requests.get(realURL)
+    with open(picPath, 'wb') as file:
+        file.write(picture.content)
     print('Picture downloaded')
     if system == 'Windows':
         # set pic as wallpaper
@@ -58,4 +61,4 @@ while True:
         os.system('export GIO_EXTRA_MODULES=/usr/lib/x86_64-linux-gnu/gio/modules/ && gsettings set org.gnome.desktop.background picture-uri "file://%s"' % (picPath))
     print('Wallpaper updated')
     print('waiting for %d more minutes' % (period))
-    time.sleep(period*60)  # time period to change the Pic
+    time.sleep(period * 60)  # time period to change the Pic
