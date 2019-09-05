@@ -13,6 +13,11 @@ Collection](https://github.com/OysterQAQ/Pixiv-Illustration-Collection).
 
 ❗️a python3 which is added to PATH is needed.
 
+python library `requests` is needed
+
+run `import requests` in python to check if you have it. if you don't, run
+`pip install requests` to get it.
+
 ## Installation
 
 ```shell
