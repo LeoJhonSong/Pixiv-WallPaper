@@ -4,6 +4,7 @@
 import os
 import platform
 import time
+import random
 import shutil
 import ctypes
 from urllib import request
@@ -12,19 +13,23 @@ from urllib import request
 # path to store the Picture cache
 path = os.path.join(os.path.expanduser("~"), "Pictures/Pixiv-WallPaper-Cache")
 # time period to change the Picture (minutes)
-period = 10
+period = 1
 ################################################################################
 
 # detect if your platform is Windows or Linux
 system = platform.system()
 # anti-anti-crawler: User-Agent
-request_headers = {
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36"
-}
+userAgents = ["Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0"
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/537.75.14",
+        "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Win64; x64; Trident/6.0)"
+        ]
+
 url = "https://api.pixivic.com/illust?w_h_ratio=16-9&minWidth=1080&range=0.0001&isR18=false&getDetail=true"
 
 while True:
-    req = request.Request(url, headers=request_headers)
+    req = request.Request(url, headers={"User-Agent": random.choice(userAgents)})
     try:
         realURL = request.urlopen(req).geturl()
     except:
@@ -40,6 +45,8 @@ while True:
         # detect if there is cache pictures, if so, delete them
         shutil.rmtree(path)
         os.mkdir(path)
+    if not os.path.exists(path):
+        os.system('mkdir ' + path)
     request.urlretrieve(realURL, picPath)
     print('Picture downloaded')
     if system == 'Windows':
@@ -52,4 +59,3 @@ while True:
     print('Wallpaper updated')
     print('waiting for %d more minutes' % (period))
     time.sleep(period*60)  # time period to change the Pic
-
