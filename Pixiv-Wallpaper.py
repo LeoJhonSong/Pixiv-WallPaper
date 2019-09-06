@@ -39,6 +39,8 @@ while True:
         continue
     print('Got URL of the picture')
     picName = realURL[realURL.find('?id') + 4:realURL.find('&title')]
+    if picName.find('sina'):
+        continue
     picPath = os.path.join(path, (picName + ".jpg"))
     # detect if the cache folder exist, if not, make one
     if not os.path.exists(path):
